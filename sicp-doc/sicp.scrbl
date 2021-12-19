@@ -63,8 +63,44 @@ then use @racket[#%require].
   (exclusive).
 }
 
+@defproc[(get [key any/c] ...) any]{
+  Retrieve the value indexed by the specified keys from the operation table. If no such keys exist, returns @racket[#f].
+}
+
+@defproc[(put [key any/c] ... [value any/c]) void?]{
+  Store @racket[value] in the operation table under the specified keys.
+}
+
+@defproc[(get-coercion [key any/c] ...) any]{
+  Retrieve the value indexed by the specified keys from the coercion table. If no such keys exist, returns @racket[#f].
+}
+
+@defproc[(put-coercion [key any/c] ... [value any/c]) void?]{
+  Store @racket[value] in the coercion table under the specified keys.
+}
+
 @defform[(amb expr ...)]{
   The amb operator.
+}
+
+@defform[(try-again)]{
+  Retries the previous @racket[amb] operation. The equivalent of calling @racket[(amb)] with no arguments.
+}
+
+@defform[(amb-collect expr)]{
+  Repeatedly evaluates @racket[expr] until the amb tree is exhausted, then lists the results.
+}
+
+@defform[(amb-clear)]{
+  Manually clears the @racket[amb] tree.
+}
+
+@defproc[(collect-garbage) void?]{
+  Manually clears the @racket[amb] tree, then calls the garbage collector.
+}
+
+@defform[(permanent-set! var val)]{
+  Sets @racket[var] to @racket[val] in a way that won't be undone by @racket[(amb)] or @racket[(try-again)].
 }
 
 @defproc[(apply-in-underlying-scheme [proc procedure?] [args list?]) any]{
@@ -73,22 +109,6 @@ then use @racket[#%require].
 
 @defthing[user-initial-environment namespace?]{
   The current namespace.
-}
-
-@defproc[(get [key-1 any/c] [key-2 any/c]) any]{
-  Retrieve the value indexed by @racket[key-1] and @racket[key-2] from the operation table. If no such value exists, returns @racket[#f].
-}
-
-@defproc[(put [key-1 any/c] [key-2 any/c] [value any/c]) void?]{
-  Store @racket[value] in the operation table, with @racket[key-1] and @racket[key-2] as the indices.
-}
-
-@defproc[(get-coercion [key-1 any/c] [key-2 any/c]) any]{
-  Retrieve the value indexed by @racket[key-1] and @racket[key-2] from the coercion table. If no such value exists, returns @racket[#f].
-}
-
-@defproc[(put-coercion [key-1 any/c] [key-2 any/c] [value any/c]) void?]{
-  Store @racket[value] in the coercion table, with @racket[key-1] and @racket[key-2] as the indices.
 }
 
 Additionally, @racket[true], @racket[false], @racket[identity], and @racket[error] are provided from Racket.
