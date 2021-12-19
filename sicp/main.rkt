@@ -16,6 +16,7 @@
                      [amb-set! set!]
                      [r5rs:set! permanent-set!]
                      ;[amb-vector-set! vector-set!]
+                     [null? stream-null?]
                      [sqr square]
                      [add1 inc]
                      [sub1 dec]
@@ -63,7 +64,6 @@
 
 (define+provide nil '())
 (define+provide the-empty-stream '())
-(define+provide stream-null? null?)
 ;(define+provide inc add1)
 ;(define+provide dec sub1)
 (define+provide (runtime)
