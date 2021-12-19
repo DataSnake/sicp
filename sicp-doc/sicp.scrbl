@@ -3,7 +3,8 @@
 @(require scribble/manual scribble/eval
           (for-label (except-in sicp #%app #%datum #%top true false identity error)
                      (only-in racket require true false identity error
-                                     natural-number/c any/c any namespace?)))
+                                     natural-number/c any/c any namespace? with-handlers
+                                     exn:fail? exn-message call/cc)))
 
 @title{SICP Language}
 @defmodule[sicp #:lang]
@@ -64,19 +65,25 @@ then use @racket[#%require].
 }
 
 @defproc[(get [key any/c] ...) any]{
-  Retrieve the value indexed by the specified keys from the operation table. If no such keys exist, returns @racket[#f].
+  Retrieve the value indexed by the specified keys from the operation table. If no such keys exist,
+ returns @racket[#f]. Calling @racket[(get)] with no arguments will return the entire operation table.
 }
 
 @defproc[(put [key any/c] ... [value any/c]) void?]{
-  Store @racket[value] in the operation table under the specified keys.
+  Store @racket[value] in the operation table under the specified keys. Calling @racket[(put)] or
+        @racket[(put value)] without specifying at least one key will cause an error.
 }
 
 @defproc[(get-coercion [key any/c] ...) any]{
-  Retrieve the value indexed by the specified keys from the coercion table. If no such keys exist, returns @racket[#f].
+  Retrieve the value indexed by the specified keys from the coercion table. If no such keys exist,
+ returns @racket[#f]. Calling @racket[(get-coercion)] with no arguments will return the entire
+ coercion table.
 }
 
 @defproc[(put-coercion [key any/c] ... [value any/c]) void?]{
-  Store @racket[value] in the coercion table under the specified keys.
+  Store @racket[value] in the coercion table under the specified keys. Calling
+ @racket[(put-coercion)] or @racket[(put-coercion value)] without specifying at least one key will
+ cause an error.
 }
 
 @defform[(amb expr ...)]{
@@ -84,11 +91,16 @@ then use @racket[#%require].
 }
 
 @defform[(try-again)]{
-  Retries the previous @racket[amb] operation. The equivalent of calling @racket[(amb)] with no arguments.
+  Retries the previous @racket[amb] operation. The equivalent of calling @racket[(amb)] with no
+ arguments.
 }
 
 @defform[(amb-collect expr)]{
   Repeatedly evaluates @racket[expr] until the amb tree is exhausted, then lists the results.
+}
+
+@defform[(if-fail expr handler)]{
+  Evaluates @racket[expr]. If any exceptions are thrown, evaluates and returns @racket[handler].
 }
 
 @defform[(amb-clear)]{
@@ -100,7 +112,8 @@ then use @racket[#%require].
 }
 
 @defform[(permanent-set! var val)]{
-  Sets @racket[var] to @racket[val] in a way that won't be undone by @racket[(amb)] or @racket[(try-again)].
+  Sets @racket[var] to @racket[val] in a way that won't be undone by @racket[(amb)] or
+ @racket[(try-again)].
 }
 
 @defproc[(apply-in-underlying-scheme [proc procedure?] [args list?]) any]{
@@ -111,4 +124,18 @@ then use @racket[#%require].
   The current namespace.
 }
 
-Additionally, @racket[true], @racket[false], @racket[identity], and @racket[error] are provided from Racket.
+@defproc[(set-user-initial-environment! (env namespace?)) void?]{
+  Manually changes the value of @racket[user-initial-environment].
+}
+
+@defthing[⟨??⟩ void?]{
+  A placeholder so Racket won't complain about copy-pasted examples.
+}
+
+@defproc[(quietly (expr any/c) ...) void?]{
+  Evaluates every @racket[expr] for side-effects, but discards their return values.
+}
+
+Additionally, @racket[true], @racket[false], @racket[identity], @racket[error], @racket[promise?],
+@racket[call/cc], @racket[with-handlers], @racket[exn:fail?], and @racket[exn-message] are provided
+from Racket.

@@ -18,7 +18,8 @@
                      ;[amb-vector-set! vector-set!]
                      [sqr square]
                      [add1 inc]
-                     [sub1 dec]))
+                     [sub1 dec]
+                     [void quietly]))
 ;(provide set-car!)
 ;(provide set-cdr!)
 ;(provide define-namespace-anchor)
@@ -34,9 +35,7 @@
                      (define id expr))]))
 
 ;my additions that aren't technically part of the language spec
-(define+provide ⟨??⟩ void)
-(define+provide (quietly . x)
-  (void))
+(define+provide ⟨??⟩ (void))
 (define+provide (collect-garbage)
   (amb-clear)
   (racket:collect-garbage))
