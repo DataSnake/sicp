@@ -75,4 +75,20 @@ then use @racket[#%require].
   The current namespace.
 }
 
+@defproc[(get [key-1 any/c] [key-2 any/c]) any]{
+  Retrieve the value indexed by @racket[key-1] and @racket[key-2] from the operation table. If no such value exists, returns @racket[#f].
+}
+
+@defproc[(put [key-1 any/c] [key-2 any/c] [value any/c]) void?]{
+  Store @racket[value] in the operation table, with @racket[key-1] and @racket[key-2] as the indices.
+}
+
+@defproc[(get-coercion [key-1 any/c] [key-2 any/c]) any]{
+  Retrieve the value indexed by @racket[key-1] and @racket[key-2] from the coercion table. If no such value exists, returns @racket[#f].
+}
+
+@defproc[(put-coercion [key-1 any/c] [key-2 any/c] [value any/c]) void?]{
+  Store @racket[value] in the coercion table, with @racket[key-1] and @racket[key-2] as the indices.
+}
+
 Additionally, @racket[true], @racket[false], @racket[identity], and @racket[error] are provided from Racket.

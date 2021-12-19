@@ -38,6 +38,17 @@
   (syntax-rules ()
     [(_ A B) (r5rs:cons A (r5rs:delay B))]))
 
+(define operation-table (make-hash))
+(define+provide (get key1 key2)
+  (hash-ref operation-table (cons key1 key2) #f))
+(define+provide (put key1 key2 val)
+  (hash-set! operation-table (cons key1 key2) val))
+(define coercion-table (make-hash))
+(define+provide (get-coercion key1 key2)
+  (hash-ref coercion-table (cons key1 key2) #f))
+(define+provide (put-coercion key1 key2 val)
+  (hash-set! coercion-table (cons key1 key2) val))
+
 (define+provide apply-in-underlying-scheme r5rs:apply)
 
 (provide amb)
